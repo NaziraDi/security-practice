@@ -1,6 +1,7 @@
 package kg.itschool.security.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import kg.itschool.security.model.entity.Role;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -16,6 +17,7 @@ public class UserDto {
     String lastName;
     String email;
     String username;
+    Role role;
 
     @JsonIgnore
     String password;
