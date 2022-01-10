@@ -1,4 +1,4 @@
-package kg.itschool.security.security;
+package kg.itschool.security;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

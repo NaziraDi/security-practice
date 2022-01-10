@@ -1,4 +1,4 @@
-package kg.itschool.security.security;
+package kg.itschool.security;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
