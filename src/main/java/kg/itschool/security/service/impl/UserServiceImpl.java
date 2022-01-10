@@ -1,21 +1,25 @@
 package kg.itschool.security.service.impl;
 
+import kg.itschool.security.config.GenerateSecurePassword;
+import kg.itschool.security.config.PasswordConfig;
 import kg.itschool.security.mapper.UserMapper;
 import kg.itschool.security.model.dto.UserDto;
 import kg.itschool.security.model.entity.User;
 import kg.itschool.security.repository.UserRepository;
 import kg.itschool.security.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-
-import java.util.Collection;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    @Autowired
+    private GenerateSecurePassword generateSecurePassword;
 
     @Override
     public UserDto create(UserDto userDto) {
@@ -48,10 +52,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void refreshPassword(String email) {
-//        User user = userRepository.findByEmail(email)
-//                .map(user1 -> {
-//                    String oldPassword = user1.getPassword();
-//                });
+        userRepository.findByEmail(email).map(user -> {
+            String oldPassword = user.getPassword();
+            String newPassword = passwordEncoder.encode(generateSecurePassword.generatePassword(10));
+            user.setPassword(newPassword);
+            return userRepository.save(user);
+        });
+
     }
 
     @Override

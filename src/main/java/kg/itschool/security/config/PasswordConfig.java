@@ -5,7 +5,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-    @Configuration
+import java.util.Random;
+
+@Configuration
     public class PasswordConfig {
 
         @Bean
@@ -14,4 +16,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
         }
 
 
+        @Bean
+        public String generatePassword(){
+            return GenerateSecurePassword.generatePassword(10);
+        }
     }
