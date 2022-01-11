@@ -11,4 +11,6 @@ public enum Authority {
     ROLE_DELETE,
     ROLE_UPDATE,
 
+    READ_AUTHORITIES
+
 }

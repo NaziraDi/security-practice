@@ -1,7 +1,6 @@
 package kg.itschool.security.service.impl;
 
-import kg.itschool.security.config.GenerateSecurePassword;
-import kg.itschool.security.config.PasswordConfig;
+import kg.itschool.security.util.GenerateSecurePassword;
 import kg.itschool.security.mapper.UserMapper;
 import kg.itschool.security.model.dto.UserDto;
 import kg.itschool.security.model.entity.User;
@@ -18,8 +17,6 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
-    @Autowired
-    private GenerateSecurePassword generateSecurePassword;
 
     @Override
     public UserDto create(UserDto userDto) {
@@ -41,7 +38,7 @@ public class UserServiceImpl implements UserService {
                 .firstName(userDto.getFirstName())
                 .email(userDto.getEmail())
                 .lastName(userDto.getLastName())
-                .password(userDto.getPassword())
+                .password(passwordEncoder.encode(userDto.getPassword()))
                 .username(userDto.getUsername())
                 .build();
 
@@ -53,12 +50,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public void refreshPassword(String email) {
         userRepository.findByEmail(email).map(user -> {
-            String oldPassword = user.getPassword();
-            String newPassword = passwordEncoder.encode(generateSecurePassword.generatePassword(10));
-            user.setPassword(newPassword);
+            String newPassword = GenerateSecurePassword.generatePassword(10);
+            // send to email newPassword
+            user.setPassword(passwordEncoder.encode(newPassword));
             return userRepository.save(user);
         });
-
     }
 
     @Override
