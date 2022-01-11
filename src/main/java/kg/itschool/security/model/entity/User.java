@@ -2,12 +2,15 @@ package kg.itschool.security.model.entity;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.Date;
 import java.util.stream.Collectors;
 
 @Data
@@ -43,6 +46,15 @@ public class User implements UserDetails {
     @JoinColumn(name = "role_id", referencedColumnName = "id")
     Role role;
 
+    @CreationTimestamp
+    Date dateCreated;
+
+    @UpdateTimestamp
+    Date dateUpdated;
+
+    @Column(name = "is_active", nullable = false, columnDefinition = "BOOLEAN DEFAULT TRUE")
+    Boolean isActive;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return role.getAuthorities()
@@ -53,22 +65,22 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return isActive;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return isActive;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return isActive;
     }
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return isActive;
     }
 
 }
